@@ -1,7 +1,4 @@
-# Coding Assignment by **Akash Ranjan**
-
-## About Me
-I am currently pursuing my final year in **BTech in Computer Science** with a specialization in **Artificial Intelligence**. My interests lie in **Web Development**, **Data Processing**, and **Artificial Intelligence**, which have motivated me to acquire various technical skills.
+# Coding Assignment by **Sai Yeswanth Mallajosyula**
 
 ## Overview
 This repository contains solutions for two coding exercises, both implemented in **Java**.
