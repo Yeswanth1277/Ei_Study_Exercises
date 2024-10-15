@@ -1,66 +1,79 @@
-package Exercise1.Behavioral;
-
-// Subject (WeatherStation)
-import java.util.ArrayList;
-import java.util.List;
-
-interface Observer {
-    void update(float temperature, float humidity);
+// Command Interface
+interface Command {
+    void execute();
 }
 
-class WeatherStation {
-    private List<Observer> observers = new ArrayList<>();
-    private float temperature;
-    private float humidity;
-
-    public void addObserver(Observer observer) {
-        observers.add(observer);
+// Receiver - The actual light that performs the action
+class Light {
+    public void turnOn() {
+        System.out.println("The light is on.");
     }
-
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.update(temperature, humidity);
-        }
-    }
-
-    public void setWeatherData(float temperature, float humidity) {
-        this.temperature = temperature;
-        this.humidity = humidity;
-        notifyObservers();
+    
+    public void turnOff() {
+        System.out.println("The light is off.");
     }
 }
 
-// Observers
-class PhoneDisplay implements Observer {
+// Concrete Command for turning the light on
+class TurnOnLightCommand implements Command {
+    private Light light;
+
+    public TurnOnLightCommand(Light light) {
+        this.light = light;
+    }
+
     @Override
-    public void update(float temperature, float humidity) {
-        System.out.println("Phone Display - Temperature: " + temperature + ", Humidity: " + humidity);
+    public void execute() {
+        light.turnOn();
     }
 }
 
-class WebDashboard implements Observer {
+// Concrete Command for turning the light off
+class TurnOffLightCommand implements Command {
+    private Light light;
+
+    public TurnOffLightCommand(Light light) {
+        this.light = light;
+    }
+
     @Override
-    public void update(float temperature, float humidity) {
-        System.out.println("Web Dashboard - Temperature: " + temperature + ", Humidity: " + humidity);
+    public void execute() {
+        light.turnOff();
     }
 }
 
-// Main Application
+// Invoker - The remote control
+class RemoteControl {
+    private Command command;
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public void pressButton() {
+        command.execute();
+    }
+}
+
+// Main Application - CommandPatternDemo
 public class CommandPatternDemo {
     public static void main(String[] args) {
-        WeatherStation weatherStation = new WeatherStation();
-        PhoneDisplay phoneDisplay = new PhoneDisplay();
-        WebDashboard webDashboard = new WebDashboard();
-
-        weatherStation.addObserver(phoneDisplay);
-        weatherStation.addObserver(webDashboard);
-
-        weatherStation.setWeatherData(30.0f, 70.0f);
-        weatherStation.setWeatherData(28.0f, 75.0f);
+        // Receiver
+        Light livingRoomLight = new Light();
+        
+        // Concrete Commands
+        Command turnOnCommand = new TurnOnLightCommand(livingRoomLight);
+        Command turnOffCommand = new TurnOffLightCommand(livingRoomLight);
+        
+        // Invoker (Remote Control)
+        RemoteControl remote = new RemoteControl();
+        
+        // Turn the light on
+        remote.setCommand(turnOnCommand);
+        remote.pressButton(); // Output: The light is on.
+        
+        // Turn the light off
+        remote.setCommand(turnOffCommand);
+        remote.pressButton(); // Output: The light is off.
     }
 }
-
